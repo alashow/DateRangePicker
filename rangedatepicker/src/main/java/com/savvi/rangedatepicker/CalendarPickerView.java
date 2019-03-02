@@ -130,10 +130,6 @@ public class CalendarPickerView extends RecyclerView {
     a.recycle();
 
     adapter = new MonthAdapter();
-    // TODO:
-    //setDivider(null);
-    //setDividerHeight(0);
-    //setCacheColorHint(bg);
     setBackgroundColor(bg);
     timeZone = TimeZone.getDefault();
     locale = Locale.getDefault();
@@ -144,7 +140,7 @@ public class CalendarPickerView extends RecyclerView {
       Calendar nextYear = Calendar.getInstance(timeZone, locale);
       nextYear.add(Calendar.YEAR, 1);
 
-      init(new Date(), nextYear.getTime()) //
+      init(new Date(), nextYear.getTime())
           .withSelectedDate(new Date());
     }
   }
@@ -239,11 +235,9 @@ public class CalendarPickerView extends RecyclerView {
     return new FluentInitializer();
   }
 
-
   public FluentInitializer init(Date minDate, Date maxDate) {
     return init(minDate, maxDate, TimeZone.getDefault(), Locale.getDefault(), new SimpleDateFormat("MMMM", Locale.getDefault()));
   }
-
 
   public FluentInitializer init(Date minDate, Date maxDate, TimeZone timeZone) {
     return init(minDate, maxDate, timeZone, Locale.getDefault(), new SimpleDateFormat("MMMM", Locale.getDefault()));
@@ -252,7 +246,6 @@ public class CalendarPickerView extends RecyclerView {
   public FluentInitializer init(Date minDate, Date maxDate, DateFormat monthNameFormat) {
     return init(minDate, maxDate, TimeZone.getDefault(), Locale.getDefault(), monthNameFormat);
   }
-
 
   public FluentInitializer init(Date minDate, Date maxDate, Locale locale) {
     return init(minDate, maxDate, TimeZone.getDefault(), locale, new SimpleDateFormat("MMMM", locale));
@@ -344,8 +337,7 @@ public class CalendarPickerView extends RecyclerView {
         if (smoothScroll) {
           smoothScrollToPosition(selectedIndex);
         } else {
-            //TODO set selection
-          //setSelection(selectedIndex);
+          getLayoutManager().scrollToPosition(selectedIndex);
         }
       }
     });
@@ -523,11 +515,9 @@ public class CalendarPickerView extends RecyclerView {
     }
   }
 
-
   public boolean selectDate(Date date) {
     return selectDate(date, false);
   }
-
 
   public boolean selectDate(Date date, boolean smoothScroll) {
     validateDate(date);
@@ -797,9 +787,9 @@ public class CalendarPickerView extends RecyclerView {
           return months.size();
       }
 
-      public class MonthViewHolder extends RecyclerView.ViewHolder {
+      class MonthViewHolder extends RecyclerView.ViewHolder {
           private MonthView monthView;
-          public MonthViewHolder(MonthView v) {
+          MonthViewHolder(MonthView v) {
               super(v);
               monthView = v;
           }
