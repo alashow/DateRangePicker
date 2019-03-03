@@ -93,6 +93,7 @@ public class CalendarPickerView extends RecyclerView {
   private OnInvalidDateSelectedListener invalidDateListener =
       new DefaultOnInvalidDateSelectedListener();
   private CellClickInterceptor cellClickInterceptor;
+  private ScrollToIndexInterceptor scrollToIndexInterceptor;
   private List<CalendarCellDecorator> decorators;
   private DayViewAdapter dayViewAdapter = new DefaultDayViewAdapter();
 
@@ -188,8 +189,7 @@ public class CalendarPickerView extends RecyclerView {
     monthCounter = Calendar.getInstance(timeZone, locale);
     this.monthNameFormat = monthNameFormat;
     monthNameFormat.setTimeZone(timeZone);
-    weekdayNameFormat =
-        new SimpleDateFormat("E", locale);
+    weekdayNameFormat = new SimpleDateFormat("E", locale);
     weekdayNameFormat.setTimeZone(timeZone);
     fullDateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
     fullDateFormat.setTimeZone(timeZone);
@@ -263,7 +263,6 @@ public class CalendarPickerView extends RecyclerView {
       return withSelectedDates(Collections.singletonList(selectedDates));
     }
 
-
     public FluentInitializer withSelectedDates(Collection<Date> selectedDates) {
       if (selectionMode == SelectionMode.SINGLE && selectedDates.size() > 1) {
         throw new IllegalArgumentException("SINGLE mode can't be used with multiple selectedDates");
@@ -287,7 +286,6 @@ public class CalendarPickerView extends RecyclerView {
       highlightDates(dates);
       return this;
     }
-
 
     public FluentInitializer withHighlightedDate(Date date) {
       return withHighlightedDates(Collections.singletonList(date));
@@ -325,22 +323,24 @@ public class CalendarPickerView extends RecyclerView {
       adapter.notifyDataSetChanged();
   }
 
-  private void scrollToSelectedMonth(final int selectedIndex) {
-    scrollToSelectedMonth(selectedIndex, false);
+  private void scrollToSelectedIndex(final int selectedIndex) {
+    scrollToSelectedIndex(selectedIndex, false);
   }
 
-  private void scrollToSelectedMonth(final int selectedIndex, final boolean smoothScroll) {
-    post(new Runnable() {
-      @Override public void run() {
-        Logr.d("Scrolling to position %d", selectedIndex);
-
-        if (smoothScroll) {
-          smoothScrollToPosition(selectedIndex);
-        } else {
-          getLayoutManager().scrollToPosition(selectedIndex);
-        }
-      }
-    });
+  private void scrollToSelectedIndex(final int selectedIndex, final boolean smoothScroll) {
+    if (scrollToIndexInterceptor != null && ! scrollToIndexInterceptor.scrollToIndex(selectedIndex, smoothScroll)) {
+      post(new Runnable() {
+          @Override
+          public void run() {
+              Logr.d("Scrolling to position %d", selectedIndex);
+              if (smoothScroll) {
+                  smoothScrollToPosition(selectedIndex);
+              } else {
+                  getLayoutManager().scrollToPosition(selectedIndex);
+              }
+          }
+      });
+    }
   }
 
   private void scrollToSelectedDates() {
@@ -362,9 +362,9 @@ public class CalendarPickerView extends RecyclerView {
       }
     }
     if (selectedIndex != null) {
-      scrollToSelectedMonth(selectedIndex);
+      scrollToSelectedIndex(selectedIndex);
     } else if (todayIndex != null) {
-      scrollToSelectedMonth(todayIndex);
+      scrollToSelectedIndex(todayIndex);
     }
   }
 
@@ -381,7 +381,7 @@ public class CalendarPickerView extends RecyclerView {
       }
     }
     if (selectedIndex != null) {
-      scrollToSelectedMonth(selectedIndex);
+      scrollToSelectedIndex(selectedIndex);
       return true;
     }
     return false;
@@ -528,7 +528,7 @@ public class CalendarPickerView extends RecyclerView {
     }
     boolean wasSelected = doSelectDate(date, monthCellWithMonthIndex.cell);
     if (wasSelected) {
-      scrollToSelectedMonth(monthCellWithMonthIndex.monthIndex, smoothScroll);
+      scrollToSelectedIndex(monthCellWithMonthIndex.monthIndex, smoothScroll);
     }
     return wasSelected;
   }
@@ -944,6 +944,11 @@ public class CalendarPickerView extends RecyclerView {
     cellClickInterceptor = listener;
   }
 
+  /** Set a listener to intercept scrolling. */
+  public void setScrollToIndexInterceptor(ScrollToIndexInterceptor listener) {
+    scrollToIndexInterceptor = listener;
+  }
+
   /**
    * Interface to be notified when a new date is selected or unselected. This will only be called
    * when the user initiates the date selection.  If you call {@link #selectDate(Date)} this
@@ -986,6 +991,17 @@ public class CalendarPickerView extends RecyclerView {
    */
   public interface CellClickInterceptor {
     boolean onCellClicked(Date date);
+  }
+
+    /**
+     * Interface to be notified when scrolling to date position is needed and possibly override scroll logic.
+     * By default, the library will call {@link #getLayoutManager().scrollToPosition()} and {@link #smoothScrollToPosition(int)}
+     * Example use case: when you need to scroll to top of list (and not center as {@link #getLayoutManager().scrollToPosition()} does)
+     *
+     * @see #setScrollToIndexInterceptor(ScrollToIndexInterceptor)
+     */
+  public interface ScrollToIndexInterceptor {
+    boolean scrollToIndex(int index, boolean smoothScroll);
   }
 
   private class DefaultOnInvalidDateSelectedListener implements OnInvalidDateSelectedListener {
