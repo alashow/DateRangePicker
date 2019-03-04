@@ -329,7 +329,9 @@ public class CalendarPickerView extends RecyclerView {
     }
 
     private void scrollToSelectedIndex(final int selectedIndex, final boolean smoothScroll) {
-        if (scrollToIndexInterceptor != null && ! scrollToIndexInterceptor.scrollToIndex(selectedIndex, smoothScroll)) {
+        if (scrollToIndexInterceptor != null) {
+            scrollToIndexInterceptor.scrollToIndex(selectedIndex, smoothScroll);
+        } else {
             post(new Runnable() {
                 @Override
                 public void run() {
@@ -461,9 +463,9 @@ public class CalendarPickerView extends RecyclerView {
     public List<Date> getSelectedDates() {
         List<Date> selectedDates = new ArrayList<>();
         for(MonthCellDescriptor cal : selectedCells) {
-          if (! highlightedCells.contains(cal)) {
-            selectedDates.add(cal.getDate());
-          }
+            if (! highlightedCells.contains(cal)) {
+                selectedDates.add(cal.getDate());
+            }
         }
         Collections.sort(selectedDates);
         return selectedDates;
@@ -525,10 +527,20 @@ public class CalendarPickerView extends RecyclerView {
     }
 
     public boolean selectDate(Date date) {
-        return selectDate(date, false);
+        return selectDate(date, true);
     }
 
-    public boolean selectDate(Date date, boolean smoothScroll) {
+    public boolean selectDate(Date date, boolean scroll) {
+        return selectDate(date, scroll, false);
+    }
+
+    /**
+     * @param date         the date
+     * @param scroll       scroll to month if the date gets selected
+     * @param smoothScroll smooth scroll
+     * @return whether the given date selected
+     */
+    public boolean selectDate(Date date, boolean scroll, boolean smoothScroll) {
         validateDate(date);
 
         MonthCellWithMonthIndex monthCellWithMonthIndex = getMonthCellWithIndexByDate(date);
@@ -536,7 +548,7 @@ public class CalendarPickerView extends RecyclerView {
             return false;
         }
         boolean wasSelected = doSelectDate(date, monthCellWithMonthIndex.cell);
-        if (wasSelected) {
+        if (wasSelected && scroll) {
             scrollToSelectedIndex(monthCellWithMonthIndex.monthIndex, smoothScroll);
         }
         return wasSelected;
