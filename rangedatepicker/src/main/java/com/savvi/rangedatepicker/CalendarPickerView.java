@@ -459,11 +459,21 @@ public class CalendarPickerView extends RecyclerView {
     /**
      * Clears out the hours/minutes/seconds/millis of a Calendar.
      */
-    static void setMidnight(Calendar cal) {
-        cal.set(HOUR_OF_DAY, 0);
-        cal.set(MINUTE, 0);
-        cal.set(SECOND, 0);
-        cal.set(MILLISECOND, 0);
+    private void setMidnight(Calendar calendar) {
+        calendar.set(HOUR_OF_DAY, 0);
+        calendar.set(MINUTE, 0);
+        calendar.set(SECOND, 0);
+        calendar.set(MILLISECOND, 0);
+    }
+
+    /**
+     * Clears out the hours/minutes/seconds/millis of a Date.
+     */
+    private Date getDateInMidnight(Date date) {
+        Calendar calendar = Calendar.getInstance(timeZone,locale);
+        calendar.setTime(date);
+        setMidnight(calendar);
+        return calendar.getTime();
     }
 
     private class CellClickedListener implements MonthView.Listener {
@@ -527,10 +537,10 @@ public class CalendarPickerView extends RecyclerView {
 
         List<Date> oldDates = getSelectedDates();
         if (oldDates.size() > 0) {
-            same = oldDates.get(0).equals(selectedDates.get(0));
+            same = oldDates.get(0).equals(getDateInMidnight(selectedDates.get(0)));
         }
         if (oldDates.size() > 1 && selectedDates.size() > 1) {
-            same = same && oldDates.get(oldDates.size() - 1).equals(selectedDates.get(1));
+            same = same && oldDates.get(oldDates.size() - 1).equals(getDateInMidnight(selectedDates.get(1)));
         }
 
         // select only if old selected dates and new are not the same
