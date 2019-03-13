@@ -10,32 +10,16 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static java.util.Calendar.DATE;
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.DAY_OF_WEEK;
-import static java.util.Calendar.HOUR_OF_DAY;
-import static java.util.Calendar.MILLISECOND;
-import static java.util.Calendar.MINUTE;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.SECOND;
-import static java.util.Calendar.YEAR;
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static java.util.Calendar.*;
 
 
 public class CalendarPickerView extends RecyclerView {
@@ -260,26 +244,20 @@ public class CalendarPickerView extends RecyclerView {
             return this;
         }
 
-        public FluentInitializer withSelectedDate(Date selectedDates) {
-            return withSelectedDates(Collections.singletonList(selectedDates));
+        public FluentInitializer withSelectedDate(Date selectedDate) {
+          return withSelectedDate(selectedDate, true);
         }
 
-        public FluentInitializer withSelectedDates(Collection<Date> selectedDates) {
-            if (selectionMode == SelectionMode.SINGLE && selectedDates.size() > 1) {
-                throw new IllegalArgumentException("SINGLE mode can't be used with multiple selectedDates");
-            }
-            if (selectionMode == SelectionMode.RANGE && selectedDates.size() > 2) {
-                throw new IllegalArgumentException(
-                    "RANGE mode only allows two selectedDates.  You tried to pass " + selectedDates.size());
-            }
-            if (selectedDates != null) {
-                for(Date date : selectedDates) {
-                    selectDate(date);
-                }
-            }
-            scrollToSelectedDates();
+        public FluentInitializer withSelectedDate(Date selectedDate, boolean scroll) {
+            return withSelectedDates(Collections.singletonList(selectedDate), scroll);
+        }
 
-            validateAndUpdate();
+        public FluentInitializer withSelectedDates(List<Date> selectedDates) {
+          return withSelectedDates(selectedDates, true);
+        }
+
+        public FluentInitializer withSelectedDates(List<Date> selectedDates, boolean scroll) {
+            selectDates(selectedDates, scroll);
             return this;
         }
 
@@ -524,6 +502,54 @@ public class CalendarPickerView extends RecyclerView {
                 }
             }
         }
+    }
+
+    public boolean selectDates(List<Date> selectedDates) {
+      return selectDates(selectedDates, true);
+    }
+
+    public boolean selectDates(List<Date> selectedDates, boolean scroll) {
+      if (selectedDates.isEmpty()){
+          clearSelectedDates();
+          return true;
+      }
+
+      if (selectionMode == SelectionMode.SINGLE && selectedDates.size() > 1) {
+        throw new IllegalArgumentException("SINGLE mode can't be used with multiple selectedDates");
+      }
+      if (selectionMode == SelectionMode.RANGE && selectedDates.size() > 2) {
+        throw new IllegalArgumentException(
+            "RANGE mode only allows two selectedDates.  You tried to pass " + selectedDates.size());
+      }
+
+      boolean selected = false;
+      boolean same = false;
+
+      List<Date> oldDates = getSelectedDates();
+      if (oldDates.size() > 0) {
+          same = oldDates.get(0).equals(selectedDates.get(0));
+      }
+      if (oldDates.size()>1 && selectedDates.size()>1) {
+          same = same && oldDates.get(oldDates.size() - 1).equals(selectedDates.get(1));
+      }
+
+      // select only if old selected dates and new are not the same
+      // or selection mode is multiple
+      if (selectionMode == SelectionMode.MULTIPLE || !same) {
+        selected = true;
+
+        clearSelectedDates();
+        for (Date date : selectedDates) {
+          if (!selectDate(date, false)) {
+            selected = false;
+          }
+        }
+
+        if (scroll) scrollToSelectedDates();
+      }
+
+      validateAndUpdate();
+      return selected;
     }
 
     public boolean selectDate(Date date) {
