@@ -45,7 +45,7 @@ public class CalendarPickerView extends RecyclerView {
 
     private final CalendarPickerView.MonthAdapter adapter;
     private final IndexedLinkedHashMap<String, List<List<MonthCellDescriptor>>> cells =
-        new IndexedLinkedHashMap<>();
+            new IndexedLinkedHashMap<>();
     final MonthView.Listener listener = new CellClickedListener();
     final List<MonthDescriptor> months = new ArrayList<>();
     final List<MonthCellDescriptor> selectedCells = new ArrayList<>();
@@ -76,7 +76,7 @@ public class CalendarPickerView extends RecyclerView {
     private OnDateSelectedListener dateListener;
     private DateSelectableFilter dateConfiguredListener;
     private OnInvalidDateSelectedListener invalidDateListener =
-        new DefaultOnInvalidDateSelectedListener();
+            new DefaultOnInvalidDateSelectedListener();
     private CellClickInterceptor cellClickInterceptor;
     private ScrollToIndexInterceptor scrollToIndexInterceptor;
     private List<CalendarCellDecorator> decorators;
@@ -101,18 +101,18 @@ public class CalendarPickerView extends RecyclerView {
         Resources res = context.getResources();
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CalendarPickerView);
         final int bg = a.getColor(R.styleable.CalendarPickerView_android_background,
-            res.getColor(R.color.calendar_bg));
+                res.getColor(R.color.calendar_bg));
         dividerColor = a.getColor(R.styleable.CalendarPickerView_tsquare_dividerColor,
-            res.getColor(R.color.calendar_divider));
+                res.getColor(R.color.calendar_divider));
         dayBackgroundResId = a.getResourceId(R.styleable.CalendarPickerView_tsquare_dayBackground,
-            R.drawable.calendar_bg_selector);
+                R.drawable.calendar_bg_selector);
         dayTextColorResId = a.getResourceId(R.styleable.CalendarPickerView_tsquare_dayTextColor,
-            R.drawable.day_text_color);
+                R.drawable.day_text_color);
         titleTextColor = a.getColor(R.styleable.CalendarPickerView_tsquare_titleTextColor,
-            res.getColor(R.color.dateTimeRangePickerTitleTextColor));
+                res.getColor(R.color.dateTimeRangePickerTitleTextColor));
         displayHeader = a.getBoolean(R.styleable.CalendarPickerView_tsquare_displayHeader, true);
         headerTextColor = a.getColor(R.styleable.CalendarPickerView_tsquare_headerTextColor,
-            res.getColor(R.color.dateTimeRangePickerHeaderTextColor));
+                res.getColor(R.color.dateTimeRangePickerHeaderTextColor));
         a.recycle();
 
         adapter = new MonthAdapter();
@@ -127,7 +127,7 @@ public class CalendarPickerView extends RecyclerView {
             nextYear.add(Calendar.YEAR, 1);
 
             init(new Date(), nextYear.getTime())
-                .withSelectedDate(new Date());
+                    .withSelectedDate(new Date());
         }
     }
 
@@ -152,11 +152,11 @@ public class CalendarPickerView extends RecyclerView {
     public FluentInitializer init(Date minDate, Date maxDate, TimeZone timeZone, Locale locale, DateFormat monthNameFormat) {
         if (minDate == null || maxDate == null) {
             throw new IllegalArgumentException(
-                "minDate and maxDate must be non-null.  " + dbg(minDate, maxDate));
+                    "minDate and maxDate must be non-null.  " + dbg(minDate, maxDate));
         }
         if (minDate.after(maxDate)) {
             throw new IllegalArgumentException(
-                "minDate must be before maxDate.  " + dbg(minDate, maxDate));
+                    "minDate must be before maxDate.  " + dbg(minDate, maxDate));
         }
         if (locale == null) {
             throw new IllegalArgumentException("Locale is null.");
@@ -197,19 +197,19 @@ public class CalendarPickerView extends RecyclerView {
 
         // maxDate is exclusive: bump back to the previous day so if maxDate is the first of a month,
         // we don't accidentally include that month in the view.
-        maxCal.add(MILLISECOND, - 1);
+        maxCal.add(MILLISECOND, -1);
 
         // Now iterate between minCal and maxCal and build up our list of months to show.
         monthCounter.setTime(minCal.getTime());
         final int maxMonth = maxCal.get(MONTH);
         final int maxYear = maxCal.get(YEAR);
         while ((monthCounter.get(MONTH) <= maxMonth // Up to, including the month.
-            || monthCounter.get(YEAR) < maxYear) // Up to the year.
-            && monthCounter.get(YEAR) < maxYear + 1) { // But not > next yr.
+                || monthCounter.get(YEAR) < maxYear) // Up to the year.
+                && monthCounter.get(YEAR) < maxYear + 1) { // But not > next yr.
             Date date = monthCounter.getTime();
             MonthDescriptor month =
-                new MonthDescriptor(monthCounter.get(MONTH), monthCounter.get(YEAR), date,
-                    monthNameFormat.format(date));
+                    new MonthDescriptor(monthCounter.get(MONTH), monthCounter.get(YEAR), date,
+                            monthNameFormat.format(date));
             cells.put(monthKey(month), getMonthCells(month, monthCounter));
             Logr.d("Adding month %s", month);
             months.add(month);
@@ -245,7 +245,7 @@ public class CalendarPickerView extends RecyclerView {
         }
 
         public FluentInitializer withSelectedDate(Date selectedDate) {
-          return withSelectedDate(selectedDate, true);
+            return withSelectedDate(selectedDate, true);
         }
 
         public FluentInitializer withSelectedDate(Date selectedDate, boolean scroll) {
@@ -253,7 +253,7 @@ public class CalendarPickerView extends RecyclerView {
         }
 
         public FluentInitializer withSelectedDates(List<Date> selectedDates) {
-          return withSelectedDates(selectedDates, true);
+            return withSelectedDates(selectedDates, true);
         }
 
         public FluentInitializer withSelectedDates(List<Date> selectedDates, boolean scroll) {
@@ -275,7 +275,7 @@ public class CalendarPickerView extends RecyclerView {
             DateFormatSymbols symbols = new DateFormatSymbols(locale);
             symbols.setShortWeekdays(newShortWeekdays);
             weekdayNameFormat =
-                new SimpleDateFormat("E", symbols);
+                    new SimpleDateFormat("E", symbols);
             return this;
         }
 
@@ -328,10 +328,10 @@ public class CalendarPickerView extends RecyclerView {
         Integer selectedIndex = null;
         Integer todayIndex = null;
         Calendar today = Calendar.getInstance(timeZone, locale);
-        for(int c = 0; c < months.size(); c++) {
+        for (int c = 0; c < months.size(); c++) {
             MonthDescriptor month = months.get(c);
             if (selectedIndex == null) {
-                for(Calendar selectedCal : selectedCals) {
+                for (Calendar selectedCal : selectedCals) {
                     if (sameMonth(selectedCal, month)) {
                         selectedIndex = c;
                         break;
@@ -354,7 +354,7 @@ public class CalendarPickerView extends RecyclerView {
 
         Calendar cal = Calendar.getInstance(timeZone, locale);
         cal.setTime(date);
-        for(int c = 0; c < months.size(); c++) {
+        for (int c = 0; c < months.size(); c++) {
             MonthDescriptor month = months.get(c);
             if (sameMonth(cal, month)) {
                 selectedIndex = c;
@@ -429,7 +429,7 @@ public class CalendarPickerView extends RecyclerView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (months.isEmpty()) {
             throw new IllegalStateException(
-                "Must have at least one month to display.  Did you forget to call init()?");
+                    "Must have at least one month to display.  Did you forget to call init()?");
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
@@ -440,8 +440,8 @@ public class CalendarPickerView extends RecyclerView {
 
     public List<Date> getSelectedDates() {
         List<Date> selectedDates = new ArrayList<>();
-        for(MonthCellDescriptor cal : selectedCells) {
-            if (! highlightedCells.contains(cal)) {
+        for (MonthCellDescriptor cal : selectedCells) {
+            if (!highlightedCells.contains(cal)) {
                 selectedDates.add(cal.getDate());
             }
         }
@@ -486,7 +486,7 @@ public class CalendarPickerView extends RecyclerView {
             if (cellClickInterceptor != null && cellClickInterceptor.onCellClicked(clickedDate)) {
                 return;
             }
-            if (! betweenDates(clickedDate, minCal, maxCal) || ! isDateSelectable(clickedDate)) {
+            if (!betweenDates(clickedDate, minCal, maxCal) || !isDateSelectable(clickedDate)) {
                 if (invalidDateListener != null) {
                     invalidDateListener.onInvalidDateSelected(clickedDate);
                 }
@@ -505,51 +505,51 @@ public class CalendarPickerView extends RecyclerView {
     }
 
     public boolean selectDates(List<Date> selectedDates) {
-      return selectDates(selectedDates, true);
+        return selectDates(selectedDates, true);
     }
 
     public boolean selectDates(List<Date> selectedDates, boolean scroll) {
-      if (selectedDates.isEmpty()){
-          clearSelectedDates();
-          return true;
-      }
-
-      if (selectionMode == SelectionMode.SINGLE && selectedDates.size() > 1) {
-        throw new IllegalArgumentException("SINGLE mode can't be used with multiple selectedDates");
-      }
-      if (selectionMode == SelectionMode.RANGE && selectedDates.size() > 2) {
-        throw new IllegalArgumentException(
-            "RANGE mode only allows two selectedDates.  You tried to pass " + selectedDates.size());
-      }
-
-      boolean selected = false;
-      boolean same = false;
-
-      List<Date> oldDates = getSelectedDates();
-      if (oldDates.size() > 0) {
-          same = oldDates.get(0).equals(selectedDates.get(0));
-      }
-      if (oldDates.size()>1 && selectedDates.size()>1) {
-          same = same && oldDates.get(oldDates.size() - 1).equals(selectedDates.get(1));
-      }
-
-      // select only if old selected dates and new are not the same
-      // or selection mode is multiple
-      if (selectionMode == SelectionMode.MULTIPLE || !same) {
-        selected = true;
-
-        clearSelectedDates();
-        for (Date date : selectedDates) {
-          if (!selectDate(date, false)) {
-            selected = false;
-          }
+        if (selectedDates.isEmpty()) {
+            clearSelectedDates();
+            return true;
         }
 
-        if (scroll) scrollToSelectedDates();
-      }
+        if (selectionMode == SelectionMode.SINGLE && selectedDates.size() > 1) {
+            throw new IllegalArgumentException("SINGLE mode can't be used with multiple selectedDates");
+        }
+        if (selectionMode == SelectionMode.RANGE && selectedDates.size() > 2) {
+            throw new IllegalArgumentException(
+                    "RANGE mode only allows two selectedDates.  You tried to pass " + selectedDates.size());
+        }
 
-      validateAndUpdate();
-      return selected;
+        boolean selected = false;
+        boolean same = false;
+
+        List<Date> oldDates = getSelectedDates();
+        if (oldDates.size() > 0) {
+            same = oldDates.get(0).equals(selectedDates.get(0));
+        }
+        if (oldDates.size() > 1 && selectedDates.size() > 1) {
+            same = same && oldDates.get(oldDates.size() - 1).equals(selectedDates.get(1));
+        }
+
+        // select only if old selected dates and new are not the same
+        // or selection mode is multiple
+        if (selectionMode == SelectionMode.MULTIPLE || !same) {
+            selected = true;
+
+            clearSelectedDates();
+            for (Date date : selectedDates) {
+                if (!selectDate(date, false)) {
+                    selected = false;
+                }
+            }
+
+            if (scroll) scrollToSelectedDates();
+        }
+
+        validateAndUpdate();
+        return selected;
     }
 
     public boolean selectDate(Date date) {
@@ -570,7 +570,7 @@ public class CalendarPickerView extends RecyclerView {
         validateDate(date);
 
         MonthCellWithMonthIndex monthCellWithMonthIndex = getMonthCellWithIndexByDate(date);
-        if (monthCellWithMonthIndex == null || ! isDateSelectable(date)) {
+        if (monthCellWithMonthIndex == null || !isDateSelectable(date)) {
             return false;
         }
         boolean wasSelected = doSelectDate(date, monthCellWithMonthIndex.cell);
@@ -586,9 +586,9 @@ public class CalendarPickerView extends RecyclerView {
         }
         if (date.before(minCal.getTime()) || date.after(maxCal.getTime())) {
             throw new IllegalArgumentException(String.format(
-                "SelectedDate must be between minDate and maxDate."
-                    + "%nminDate: %s%nmaxDate: %s%nselectedDate: %s", minCal.getTime(), maxCal.getTime(),
-                date));
+                    "SelectedDate must be between minDate and maxDate."
+                            + "%nminDate: %s%nmaxDate: %s%nselectedDate: %s", minCal.getTime(), maxCal.getTime(),
+                    date));
         }
     }
 
@@ -599,7 +599,7 @@ public class CalendarPickerView extends RecyclerView {
         setMidnight(newlySelectedCal);
 
         // Clear any remaining range state.
-        for(MonthCellDescriptor selectedCell : selectedCells) {
+        for (MonthCellDescriptor selectedCell : selectedCells) {
             selectedCell.setRangeState(RangeState.NONE);
         }
 
@@ -627,7 +627,7 @@ public class CalendarPickerView extends RecyclerView {
 
         if (date != null) {
             // Select a new cell.
-            if (selectedCells.size() == 0 || ! selectedCells.get(0).equals(cell)) {
+            if (selectedCells.size() == 0 || !selectedCells.get(0).equals(cell)) {
                 selectedCells.add(cell);
                 cell.setSelected(true);
             }
@@ -642,19 +642,19 @@ public class CalendarPickerView extends RecyclerView {
 
                 int startMonthIndex = cells.getIndexOfKey(monthKey(selectedCals.get(0)));
                 int endMonthIndex = cells.getIndexOfKey(monthKey(selectedCals.get(1)));
-                for(int monthIndex = startMonthIndex; monthIndex <= endMonthIndex; monthIndex++) {
+                for (int monthIndex = startMonthIndex; monthIndex <= endMonthIndex; monthIndex++) {
                     List<List<MonthCellDescriptor>> month = cells.getValueAtIndex(monthIndex);
-                    for(List<MonthCellDescriptor> week : month) {
-                        for(MonthCellDescriptor singleCell : week) {
+                    for (List<MonthCellDescriptor> week : month) {
+                        for (MonthCellDescriptor singleCell : week) {
                             if (singleCell.getDate().after(start)
-                                && singleCell.getDate().before(end)
-                                && singleCell.isSelectable()) {
+                                    && singleCell.getDate().before(end)
+                                    && singleCell.isSelectable()) {
                                 if (highlightedCells.contains(singleCell)) {
                                     singleCell.setSelected(false);
                                     singleCell.setUnavailable(true);
                                     singleCell.setHighlighted(false);
                                     selectedCells.add(singleCell);
-                                } else if (! deactivatedDates.contains(singleCell.getDate().getDay() + 1)) {
+                                } else if (!deactivatedDates.contains(singleCell.getDate().getDay() + 1)) {
                                     singleCell.setSelected(true);
                                     singleCell.setRangeState(RangeState.MIDDLE);
                                     selectedCells.add(singleCell);
@@ -680,7 +680,7 @@ public class CalendarPickerView extends RecyclerView {
     }
 
     private void clearOldSelections() {
-        for(MonthCellDescriptor selectedCell : selectedCells) {
+        for (MonthCellDescriptor selectedCell : selectedCells) {
             // De-select the currently-selected cell.
             selectedCell.setSelected(false);
             if (highlightedCells.contains(selectedCell)) {
@@ -706,7 +706,7 @@ public class CalendarPickerView extends RecyclerView {
     }
 
     private Date applyMultiSelect(Date date, Calendar selectedCal) {
-        for(MonthCellDescriptor selectedCell : selectedCells) {
+        for (MonthCellDescriptor selectedCell : selectedCells) {
             if (selectedCell.getDate().equals(date)) {
                 // De-select the currently-selected cell.
                 selectedCell.setSelected(false);
@@ -715,7 +715,7 @@ public class CalendarPickerView extends RecyclerView {
                 break;
             }
         }
-        for(Calendar cal : selectedCals) {
+        for (Calendar cal : selectedCals) {
             if (sameDate(cal, selectedCal)) {
                 selectedCals.remove(cal);
                 break;
@@ -725,7 +725,7 @@ public class CalendarPickerView extends RecyclerView {
     }
 
     public void highlightDates(Collection<Date> dates) {
-        for(Date date : dates) {
+        for (Date date : dates) {
             validateDate(date);
 
             MonthCellWithMonthIndex monthCellWithMonthIndex = getMonthCellWithIndexByDate(date);
@@ -749,7 +749,7 @@ public class CalendarPickerView extends RecyclerView {
     }
 
     public void clearSelectedDates() {
-        for(MonthCellDescriptor selectedCell : selectedCells) {
+        for (MonthCellDescriptor selectedCell : selectedCells) {
             selectedCell.setRangeState(RangeState.NONE);
         }
 
@@ -758,7 +758,7 @@ public class CalendarPickerView extends RecyclerView {
     }
 
     public void clearHighlightedDates() {
-        for(MonthCellDescriptor cal : highlightedCells) {
+        for (MonthCellDescriptor cal : highlightedCells) {
             cal.setHighlighted(false);
         }
         highlightedCells.clear();
@@ -791,8 +791,8 @@ public class CalendarPickerView extends RecyclerView {
 
         int index = cells.getIndexOfKey(monthKey);
         List<List<MonthCellDescriptor>> monthCells = cells.get(monthKey);
-        for(List<MonthCellDescriptor> weekCells : monthCells) {
-            for(MonthCellDescriptor actCell : weekCells) {
+        for (List<MonthCellDescriptor> weekCells : monthCells) {
+            for (MonthCellDescriptor actCell : weekCells) {
                 actCal.setTime(actCell.getDate());
                 if (sameDate(actCal, searchCal) && actCell.isSelectable()) {
                     return new MonthCellWithMonthIndex(actCell, index);
@@ -818,8 +818,8 @@ public class CalendarPickerView extends RecyclerView {
         @Override
         public MonthViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             return new MonthViewHolder(MonthView.create(parent, inflater, weekdayNameFormat, listener, today, dividerColor,
-                dayBackgroundResId, dayTextColorResId, titleTextColor, displayHeader,
-                headerTextColor, decorators, locale, dayViewAdapter));
+                    dayBackgroundResId, dayTextColorResId, titleTextColor, displayHeader,
+                    headerTextColor, decorators, locale, dayViewAdapter));
         }
 
         @Override
@@ -830,7 +830,7 @@ public class CalendarPickerView extends RecyclerView {
                 position = months.size() - position - 1;
             }
             monthView.init(months.get(position), cells.getValueAtIndex(position), displayOnly,
-                titleTypeface, dateTypeface, deactivatedDates);
+                    titleTypeface, dateTypeface, deactivatedDates);
         }
 
         @Override
@@ -864,16 +864,16 @@ public class CalendarPickerView extends RecyclerView {
         Calendar maxSelectedCal = maxDate(selectedCals);
 
         while ((cal.get(MONTH) < month.getMonth() + 1 || cal.get(YEAR) < month.getYear()) //
-            && cal.get(YEAR) <= month.getYear()) {
+                && cal.get(YEAR) <= month.getYear()) {
             Logr.d("Building week row starting at %s", cal.getTime());
             List<MonthCellDescriptor> weekCells = new ArrayList<>();
             cells.add(weekCells);
-            for(int c = 0; c < 7; c++) {
+            for (int c = 0; c < 7; c++) {
                 Date date = cal.getTime();
                 boolean isCurrentMonth = cal.get(MONTH) == month.getMonth();
                 boolean isSelected = isCurrentMonth && containsDate(selectedCals, cal);
                 boolean isSelectable =
-                    isCurrentMonth && betweenDates(cal, minCal, maxCal) && isDateSelectable(date);
+                        isCurrentMonth && betweenDates(cal, minCal, maxCal) && isDateSelectable(date);
                 boolean isToday = sameDate(cal, today);
                 boolean isHighlighted = containsDate(highlightedCals, cal);
                 int value = cal.get(DAY_OF_MONTH);
@@ -890,8 +890,8 @@ public class CalendarPickerView extends RecyclerView {
                 }
 
                 weekCells.add(
-                    new MonthCellDescriptor(date, isCurrentMonth, isSelectable, isSelected, isToday,
-                        isHighlighted, value, rangeState));
+                        new MonthCellDescriptor(date, isCurrentMonth, isSelectable, isSelected, isToday,
+                                isHighlighted, value, rangeState));
                 cal.add(DATE, 1);
             }
         }
@@ -905,7 +905,7 @@ public class CalendarPickerView extends RecyclerView {
     }
 
     private static boolean containsDate(List<Calendar> selectedCals, Calendar cal) {
-        for(Calendar selectedCal : selectedCals) {
+        for (Calendar selectedCal : selectedCals) {
             if (sameDate(cal, selectedCal)) {
                 return true;
             }
@@ -931,8 +931,8 @@ public class CalendarPickerView extends RecyclerView {
 
     private static boolean sameDate(Calendar cal, Calendar selectedDate) {
         return cal.get(MONTH) == selectedDate.get(MONTH)
-            && cal.get(YEAR) == selectedDate.get(YEAR)
-            && cal.get(DAY_OF_MONTH) == selectedDate.get(DAY_OF_MONTH);
+                && cal.get(YEAR) == selectedDate.get(YEAR)
+                && cal.get(DAY_OF_MONTH) == selectedDate.get(DAY_OF_MONTH);
     }
 
     private static boolean betweenDates(Calendar cal, Calendar minCal, Calendar maxCal) {
@@ -943,7 +943,7 @@ public class CalendarPickerView extends RecyclerView {
     static boolean betweenDates(Date date, Calendar minCal, Calendar maxCal) {
         final Date min = minCal.getTime();
         return (date.equals(min) || date.after(min)) // >= minCal
-            && date.before(maxCal.getTime()); // && < maxCal
+                && date.before(maxCal.getTime()); // && < maxCal
     }
 
     private static boolean sameMonth(Calendar cal, MonthDescriptor month) {
