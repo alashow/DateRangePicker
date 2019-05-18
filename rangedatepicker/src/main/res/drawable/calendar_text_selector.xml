@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:color="@color/calendar_text_pressed_selected" android:state_pressed="true" android:state_selected="true" />
+    <item android:color="@color/calendar_text_selected_range_first" android:state_selected="true" app:tsquare_state_range_first="true" />
+    <item android:color="@color/calendar_text_selected_range_middle" android:state_selected="true" app:tsquare_state_range_middle="true" />
+    <item android:color="@color/calendar_text_selected_range_last" android:state_selected="true" app:tsquare_state_range_last="true" />
+    <item android:color="@color/calendar_text_pressed" android:state_pressed="true" />
     <item android:color="@color/calendar_text_selected" android:state_selected="true" />
-    <item android:color="@color/calendar_text_selected" android:state_pressed="true" />
     <item android:color="@color/calendar_text_inactive" app:tsquare_state_current_month="false" />
     <item android:color="@color/calendar_text_highlighted" app:tsquare_state_highlighted="true" />
     <item android:color="@color/calendar_active_month_bg" app:tsquare_state_today="true" />

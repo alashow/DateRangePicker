@@ -144,7 +144,6 @@ public class MonthView extends LinearLayout {
                         cellView.setRangeUnavailable(cell.isUnavailable());
                         cellView.setDeactivated(true);
                     } else {
-
                         cellView.setSelectable(cell.isSelectable());
                         cellView.setSelected(cell.isSelected());
                         cellView.setCurrentMonth(cell.isCurrentMonth());
