@@ -25,7 +25,6 @@ class MonthCellDescriptor {
 
     private boolean isDeactivated;
 
-
     private boolean isUnavailable;
     private RangeState rangeState;
 
@@ -84,7 +83,6 @@ class MonthCellDescriptor {
     public int getValue() {
         return value;
     }
-
 
     public boolean isUnavailable() {
         return isUnavailable;
