@@ -3,7 +3,7 @@
     android:height="24dp"
     android:viewportHeight="48"
     android:viewportWidth="48"
-    android:tint="@color/calendar_selected_range_bg">
+    android:tint="@color/calendar_selected_range_middle_bg">
     <path
         android:fillColor="#000"
         android:pathData="M 0,8h48v32h-50z"
