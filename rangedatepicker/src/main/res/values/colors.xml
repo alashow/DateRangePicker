@@ -6,20 +6,31 @@
     <color name="calendar_selected_day_bg">#ffcf40</color>
     <color name="calendar_highlighted_day_bg">#ffcf40</color>
     <color name="calendar_selected_range_bg">#ffcf40</color>
+    <color name="calendar_selected_range_first_bg">@color/calendar_selected_range_bg</color>
+    <color name="calendar_selected_range_middle_bg">@color/calendar_selected_range_bg</color>
+    <color name="calendar_selected_range_last_bg">@color/calendar_selected_range_bg</color>
     <color name="calendar_unavailable_bg">#ef5350</color>
     <color name="calendar_range_middle_unavailable_bg">#ef5350</color>
 
-    <color name="calendar_text_inactive">#ffffff</color>
+    <color name="calendar_text_inactive">#B9B9B9</color>
+    <color name="calendar_text_non_selectable">@color/calendar_text_inactive</color>
+    <color name="calendar_text_non_current_month">@color/calendar_text_inactive</color>
     <color name="calendar_text_active">#212121</color>
+    <color name="calendar_text_pressed">#70212121</color>
+    <color name="calendar_text_pressed_selected">#70ffffff</color>
+    <color name="calendar_text_pressed_selected_first">@color/calendar_text_pressed_selected</color>
+    <color name="calendar_text_pressed_selected_middle">@color/calendar_text_pressed_selected</color>
+    <color name="calendar_text_pressed_selected_last">@color/calendar_text_pressed_selected</color>
     <color name="calendar_text_selected">#ffffff</color>
-    <color name="calendar_text_unselected">#7ffefeff</color>
+    <color name="calendar_text_selected_range_first">#FFFFFF</color>
+    <color name="calendar_text_selected_range_middle">#FFFFFF</color>
+    <color name="calendar_text_selected_range_last">#FFFFFF</color>
     <color name="calendar_text_highlighted">#f5f5f5</color>
+    <color name="calendar_text_unavailable">@color/calendar_text_inactive</color>
+    <color name="calendar_text_unavailable_today">@color/calendar_text_inactive</color>
+    <color name="calendar_text_today">#2196F3</color>
+    <color name="calendar_text_today_non_selectable">#702196F3</color>
 
-    <color name="dateTimeRangePickerStateDefault">@android:color/black</color>
-    <color name="dateTimeRangePickerStateNonSelectable">@android:color/white</color>
-    <color name="dateTimeRangePickerStateToday">#ffcf40</color>
     <color name="dateTimeRangePickerHeaderTextColor">@android:color/black</color>
     <color name="dateTimeRangePickerTitleTextColor">@android:color/black</color>
-    <color name="dateTimeRangePickerRangeTextColorActive">@android:color/white</color>
-    <color name="dateTimeRangePickerRangeTextColorInactive">#B9B9B9</color>
 </resources>

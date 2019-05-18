@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:color="@color/calendar_text_pressed_selected" android:state_pressed="true" android:state_selected="true" app:tsquare_state_range_first="true" />
+    <item android:color="@color/calendar_text_pressed_selected_first" android:state_pressed="true" android:state_selected="true" app:tsquare_state_range_middle="true" />
+    <item android:color="@color/calendar_text_pressed_selected_middle" android:state_pressed="true" android:state_selected="true" app:tsquare_state_range_last="true" />
+    <item android:color="@color/calendar_text_pressed_selected_last" android:state_pressed="true" android:state_selected="true" />
+    <item android:color="@color/calendar_text_selected_range_first" android:state_selected="true" app:tsquare_state_range_first="true" />
+    <item android:color="@color/calendar_text_selected_range_middle" android:state_selected="true" app:tsquare_state_range_middle="true" />
+    <item android:color="@color/calendar_text_selected_range_last" android:state_selected="true" app:tsquare_state_range_last="true" />
+    <item android:color="@color/calendar_text_pressed" android:state_pressed="true" />
     <item android:color="@color/calendar_text_selected" android:state_selected="true" />
-    <item android:color="@color/calendar_text_selected" android:state_pressed="true" />
-    <item android:color="@color/calendar_text_inactive" app:tsquare_state_current_month="false" />
+    <item android:color="@color/calendar_text_non_current_month" app:tsquare_state_current_month="false" />
     <item android:color="@color/calendar_text_highlighted" app:tsquare_state_highlighted="true" />
-    <item android:color="@color/calendar_active_month_bg" app:tsquare_state_today="true" />
-    <item android:color="@color/calendar_text_unselected" app:tsquare_state_selectable="false" />
+    <item android:color="@color/calendar_text_today_non_selectable" app:tsquare_state_highlighted="false" app:tsquare_state_selectable="false" app:tsquare_state_today="true" app:tsquare_state_unavailable="false" />
+    <item android:color="@color/calendar_text_today" app:tsquare_state_highlighted="false" app:tsquare_state_today="true" app:tsquare_state_unavailable="false" />
+    <item android:color="@color/calendar_text_non_selectable" app:tsquare_state_selectable="false" />
+    <item android:color="@color/calendar_text_unavailable" app:tsquare_state_today="false" app:tsquare_state_unavailable="true" />
+    <item android:color="@color/calendar_text_unavailable_today" app:tsquare_state_today="true" app:tsquare_state_unavailable="true" />
+    <item android:color="@color/calendar_text_inactive" android:state_selected="false" app:tsquare_state_deactivated="true" app:tsquare_state_today="false" />
     <item android:color="@color/calendar_text_active" />
 </selector>
