@@ -107,7 +107,7 @@ public class CalendarPickerView extends RecyclerView {
         dayBackgroundResId = a.getResourceId(R.styleable.CalendarPickerView_tsquare_dayBackground,
                 R.drawable.calendar_bg_selector);
         dayTextColorResId = a.getResourceId(R.styleable.CalendarPickerView_tsquare_dayTextColor,
-                R.drawable.day_text_color);
+                R.drawable.calendar_text_selector);
         titleTextColor = a.getColor(R.styleable.CalendarPickerView_tsquare_titleTextColor,
                 res.getColor(R.color.dateTimeRangePickerTitleTextColor));
         displayHeader = a.getBoolean(R.styleable.CalendarPickerView_tsquare_displayHeader, true);
